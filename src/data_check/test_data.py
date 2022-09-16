@@ -1,10 +1,18 @@
+#!/usr/bin/env python
+"""
+Tests for checking that the data satisfies 
+certain basic criteria.
+"""
 import pandas as pd
 import numpy as np
 import scipy.stats
 
 
-def test_column_names(data):
-
+def test_column_names(data: pd.DataFrame):
+    """
+    Test if the column names of `data` coincide
+    with the expected ones.
+    """
     expected_colums = [
         "id",
         "name",
@@ -30,8 +38,12 @@ def test_column_names(data):
     assert list(expected_colums) == list(these_columns)
 
 
-def test_neighborhood_names(data):
-
+def test_neighborhood_names(data: pd.DataFrame):
+    """
+    Test if the neighborhood names in `data` coincide with 
+    the known ones (NOTE: in particular, we require *all*
+    neighborhoods).
+    """
     known_names = ["Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island"]
 
     neigh = set(data['neighbourhood_group'].unique())
@@ -61,8 +73,14 @@ def test_similar_neigh_distrib(data: pd.DataFrame, ref_data: pd.DataFrame, kl_th
 
 
 def test_row_count(data: pd.DataFrame):
+    """
+    Test if the row count is in the interval (15*10^3, 10^6)
+    """
     assert 15000 < data.shape[0] < 1000000
 
 
 def test_price_range(data, min_price: float, max_price: float):
+    """
+    Test if the prices are in the invterval (min_price, max_price)
+    """
     assert data['price'].between(min_price, max_price).all() # all() checks if all entries are True
